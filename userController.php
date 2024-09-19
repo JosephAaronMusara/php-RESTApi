@@ -69,5 +69,60 @@ class UserController {
         printf("Error");
         return false;
     }
+
+    //update a comment
+
+    public function updateComment(){
+        //query
+        $query  = "UPDATE comments SET username = :username, comment_text = :comment_text, users_id = :users_id WHERE id = :id";
+
+        //prepare
+        $stmt = $this->conn->prepare($query);
+
+        //sanitize
+        $this->username = htmlspecialchars($this->username);
+        $this->comment_text = htmlspecialchars($this->comment_text);
+        $this->users_id = htmlspecialchars($this->users_id);
+        $this->id = htmlspecialchars($this->id);
+
+        //binding
+        $stmt->bindParam(':username',$this->username);
+        $stmt->bindParam(':comment_text', $this->comment_text);
+        $stmt->bindParam(':users_id',$this->users_id);
+        $stmt->bindParam(':id',$this->id);
+        //execute
+        if($stmt->execute()){
+            return true;
+        }
+        //error
+        printf("Error");
+        return false;
+    }
+
+    //Delete
+
+    public function deleteComment(){
+        //query
+        $query = "DELETE FROM comments WHERE id = :id";
+
+        //prep
+       $stmt =  $this->conn->prepare($query);
+
+        //sanitiz
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        //bind
+        $stmt->bindParam(':id',$this->id);
+
+        //excute
+        if($stmt->execute()){
+            return true;
+        }
+        //error
+        printf("Error");
+        return false;
+
+
+    }
    
 }
